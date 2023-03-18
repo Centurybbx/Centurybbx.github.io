@@ -1,0 +1,226 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"><title>CryptDB 论文简述 | Century's Blog</title><meta name="author" content="Century"><meta name="copyright" content="Century"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="前言为什么提出？解决在加密数据库上的高效检索（要practical，不能只停留在学术层面）。 解决了什么问题？本篇文章定义了两种威胁：  第一种是内部攻击，比如对于不可信的DBA&#x2F;管理员用户，其偷偷窃取&#x2F;窃听数据所存在的威胁 第二种是敌手通过某种手段拿下整个application以及DBMS的控制权，保证目前状态下的数据隐私问题  怎么做的？通过SQL查询，在用户和DBMS中间">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CryptDB 论文简述">
+<meta property="og:url" content="http://centurybbx.github.io/2023/03/18/CryptDB-brief-description/index.html">
+<meta property="og:site_name" content="Century&#39;s Blog">
+<meta property="og:description" content="前言为什么提出？解决在加密数据库上的高效检索（要practical，不能只停留在学术层面）。 解决了什么问题？本篇文章定义了两种威胁：  第一种是内部攻击，比如对于不可信的DBA&#x2F;管理员用户，其偷偷窃取&#x2F;窃听数据所存在的威胁 第二种是敌手通过某种手段拿下整个application以及DBMS的控制权，保证目前状态下的数据隐私问题  怎么做的？通过SQL查询，在用户和DBMS中间">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://avatars.githubusercontent.com/u/55011513?v=4">
+<meta property="article:published_time" content="2023-03-18T14:01:17.000Z">
+<meta property="article:modified_time" content="2023-03-18T14:08:42.255Z">
+<meta property="article:author" content="Century">
+<meta property="article:tag" content="encrypted dabatase">
+<meta property="article:tag" content="paper">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://avatars.githubusercontent.com/u/55011513?v=4"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://centurybbx.github.io/2023/03/18/CryptDB-brief-description/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'CryptDB 论文简述',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-03-18 22:08:42'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://avatars.githubusercontent.com/u/55011513?v=4" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">7</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Century's Blog"><span class="site-name">Century's Blog</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">CryptDB 论文简述</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-03-18T14:01:17.000Z" title="发表于 2023-03-18 22:01:17">2023-03-18</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-03-18T14:08:42.255Z" title="更新于 2023-03-18 22:08:42">2023-03-18</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/research/">research</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="CryptDB 论文简述"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><h2 id="为什么提出？"><a href="#为什么提出？" class="headerlink" title="为什么提出？"></a>为什么提出？</h2><p>解决在加密数据库上的高效检索（要practical，不能只停留在学术层面）。</p>
+<h2 id="解决了什么问题？"><a href="#解决了什么问题？" class="headerlink" title="解决了什么问题？"></a>解决了什么问题？</h2><p>本篇文章定义了两种威胁：</p>
+<ol>
+<li>第一种是内部攻击，比如对于不可信的DBA&#x2F;管理员用户，其偷偷窃取&#x2F;窃听数据所存在的威胁</li>
+<li>第二种是敌手通过某种手段拿下整个application以及DBMS的控制权，保证目前状态下的数据隐私问题</li>
+</ol>
+<h2 id="怎么做的？"><a href="#怎么做的？" class="headerlink" title="怎么做的？"></a>怎么做的？</h2><p>通过SQL查询，在用户和DBMS中间加了一层proxy server来对用户查询的SQL进行一定的处理，最终将需要查询的数据透明返回给查询用户，其系统架构如下：</p>
+<img src="/2023/03/18/CryptDB-brief-description/1678851226342-39829d99-0a87-47c8-acb1-61349af315b1.png" class="" title="image.png">
+<p>为解决以上两种问题，本文提出三种解决措施：</p>
+<ol>
+<li>SQL-aware encryption strategy</li>
+</ol>
+<p>根据SQL语句有清晰结构的特点，让CryptDB能够对加密数据库执行简单的SQL操作</p>
+<ol start="2">
+<li>adjustable query-based encryption</li>
+</ol>
+<p>避免信息泄露，对于不同的查询，CryptDB在运行态对其分析处理，并提出了<strong>洋葱加密</strong></p>
+<ol start="3">
+<li>chain encryption keys to user passwords</li>
+</ol>
+<p>访问控制，在威胁二下将密钥成串连接起来，未登陆用户的密钥无法被获取，即使DBMS和application全都妥协也无法解密数据</p>
+<h1 id="Queries-over-Encrypted-Data"><a href="#Queries-over-Encrypted-Data" class="headerlink" title="Queries over Encrypted Data"></a>Queries over Encrypted Data</h1><p>:::info<br>该部分内容适用于Threat 1下的场景，即DBMS和administrator是不可信的。<br>:::<br>CryptDB中的proxy server拥有一个密钥MK，数据库表，目前所有列对应的所有加密层，加密用户数据以及辅助表。因此对于DBMS来说，表是匿名的（因为表名、列名、值都做了加密处理）。在加密数据上的query可分为以下四个步骤：</p>
+<ol>
+<li>application发出query，proxy拦截后重写query，使用MK加密对应列名和表，并把query中的常量值以最合适的方式加密处理</li>
+<li>proxy先检查DBMS是否需要给密钥来调整encryption layer，如果是的话，发送密钥并通过UDF来触发UPDATE调整对应列的encryption layer</li>
+<li>proxy将query发出，DBMS通过标准SQL查询（对于aggregate可能需要用到UDF）</li>
+<li>DBMS将数据发送，proxy解密并返回给application</li>
+</ol>
+<h2 id="SQL-aware-Encryption"><a href="#SQL-aware-Encryption" class="headerlink" title="SQL-aware Encryption"></a>SQL-aware Encryption</h2><p>为了满足SQL的多种操作，CryptDB提供了多种加密层，下面逐一介绍：</p>
+<ul>
+<li><strong>Random（RND）</strong>：该加密层是一种满足IND-CPA安全的probabilistic方案（即对于相同的输入，其输出是不同的）。它在CryptDB中安全性最高，但RND不允许在密文上进行任何计算。RND的构造一般使用分组加密算法，多使用带有初始化随机向量<code>IV</code>的AES。</li>
+<li><strong>Deterministic（DET）</strong>：该加密层是确定性方案（两个相同的输入对应一个共同的输出），安全性相对较低。因此可以在该加密层上执行相等比较运算，即可以在query中实现谓词的equality、join、GROUP BY、COUNT、DISTINCT操作。DET的构造一般为使用了CMC模式的AES（没有初始化随机向量<code>IV</code>的参与）。</li>
+<li><strong>Order-preserving Encryption（OPE）</strong>：即保序加密，对于任意的x&lt;y，其OPEK(x)&lt;OPEK(y)，它的安全性比DET还要低。根据其特性，对于任意谓词c1、c2，计算其OPEK(c1)，OPEK(c2)，即可查询在区间[c1, c2]之间的值。因此可以用来操作ORDER BY、 MIN、MAX、SORT等操作。</li>
+<li><strong>Homomorphic encryption（HOM）</strong>：即同态加密，满足IND-CPA的probabilistic方案，支持在密文上执行运算。CryptDB是用了Paillier，实现了两个同态后的密文相乘的结果与两个相加后的密文同态结果（HOMK(x)·HOMK(y)&#x3D;HOMK(x+y)）。可支持加运算。</li>
+<li><strong>Join（JOIN和OPE-JOIN）</strong>：在需要多表查询时会用到join，因此在跨表时可以与DET一同协作，也可以与OPE一同协作（即对join后的结果判断DET或者OPE排序）。</li>
+<li><strong>Word search（SEARCH）</strong>：用来支持模糊查询，即LIKE。其使用了Song（SE开山之作）的方案来对需要执行的列进行加密运算，通过将column中的值分割为若干不重复的关键词逐个加密，当query中的predicate与column中的某个关键词对应上了，则说明这个就是目标结果。但这种方式也有缺点，即它使用了Song的以关键词为单位的加密，则必然不支持非完整关键词的检索（比如要搜索的词为hello的一半-&gt;%llo%，这种时候就没法完成模糊搜索），也不支持正则表达式搜索，功能性差。</li>
+</ul>
+<h2 id="Adjustable-Query-based-Encryption"><a href="#Adjustable-Query-based-Encryption" class="headerlink" title="Adjustable Query-based Encryption"></a>Adjustable Query-based Encryption</h2><p><strong>背景</strong>：假设一种场景，在数据库中的某一列从未被application查询过（或者无需进行查询），那么使用上面提到了RND即可满足加密需求；另外如果有一列仅需要执行equality check，则使用DET即可满足需求。但可惜的是，我们无法预先知道查询集，因此需要一种可自适应的方案来动态调整加密策略。<br>CryptDB提出了一种解决方案，<strong>洋葱加密</strong>。对于上面提到的加密策略，每个加密策略是洋葱加密的一层，当需要完成多种需求时，加密层就会像洋葱一样一层一层包裹起来；当需要调整时，也可将某一层加密像洋葱一样剥离开来。</p>
+<img src="/2023/03/18/CryptDB-brief-description/1678867471561-b48daa3e-fbf7-4ccb-840e-5620e7bedc85.png" class="" title="image.png">
+<p>正如上图所示，最外层的<code>RND</code>和<code>HOM</code>提供了最高的安全性，其中包含的<code>DET</code>、<code>OPE</code>等则提供了功能性。</p>
+<hr>
+<ul>
+<li>那么实际中洋葱加密是怎么运作的呢？</li>
+</ul>
+<ol>
+<li>首先，对于每个洋葱加密层，其最开始使用的都是安全性最高的加密策略（比如RND用于equality check和order，HOM用于add，SEARCH用于search等）。</li>
+<li>当proxy收到SQL查询时，首先它会根据谓词来确定其应当执行在哪个洋葱加密层上。</li>
+<li>如果谓词所需要的执行层目前存在，则直接发送到DBMS server上执行相关操作，否则剥离当前洋葱层（通过proxy给DBMS server发送密钥来实现）。</li>
+</ol>
+<blockquote>
+<p>另外，洋葱层的解密（应当等同于剥离操作）是完全在DBMS上完成的，通过proxy server发出UDF来实现，这里属于实现细节，不做过多阐述。</p>
+</blockquote>
+<h2 id="Executing-over-Encrypted-Data"><a href="#Executing-over-Encrypted-Data" class="headerlink" title="Executing over Encrypted Data"></a>Executing over Encrypted Data</h2><p>:::info<br>该部分即讨论已到所需执行操作的洋葱层，不考虑自适应性“剥洋葱“相关事宜<br>:::<br>步骤进行到这一步其实已经非常清晰了，目前DBMS server存在的数据是”自适应性”处理后的加密数据。如果此时需要执行相关SQL操作，proxy只需通过UDF向DBMS server查询即可完成相关操作。这里简要介绍一下读、写两种操作：</p>
+<ul>
+<li>读操作</li>
+</ul>
+<p>由于SQL是一种结构化很强的语句，所以对于查询语句例如<code>SELECT ID FROM Employees WHERE Name = ‘Alice’</code>，解析器会解析到这是一条对Name列的equality check，所以首先会先将Name列对应加密后的列解密处理（这一步由proxy server调用UDF完成，即解密RND层），并将解密后的列对应到之前的表中。此时的表中ID列仍是加密处理的，Name列可以通过对DET处理后的Alice进行比较处理，得到ID列的密文和其初始置换向量。最终通过初始置换向量解密密文得到ID。</p>
+<ul>
+<li>写操作</li>
+</ul>
+<p>在前面的处理中，写操作是与读操作一样的。但对于列增情况则有例外。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://centurybbx.github.io">Century</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://centurybbx.github.io/2023/03/18/CryptDB-brief-description/">http://centurybbx.github.io/2023/03/18/CryptDB-brief-description/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://centurybbx.github.io" target="_blank">Century's Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/encrypted-dabatase/">encrypted dabatase</a><a class="post-meta__tags" href="/tags/paper/">paper</a></div><div class="post_share"><div class="social-share" data-image="https://avatars.githubusercontent.com/u/55011513?v=4" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2023/03/15/CMU-15-445-lecture-7/" title="CMU 15-445 lecture#7"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">CMU 15-445 lecture#7</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://avatars.githubusercontent.com/u/55011513?v=4" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Century</div><div class="author-info__description">系统领域新手</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">7</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Centurybbx" target="_blank" title="Github"><i class="fab fa-github"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E6%8F%90%E5%87%BA%EF%BC%9F"><span class="toc-number">1.1.</span> <span class="toc-text">为什么提出？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F"><span class="toc-number">1.2.</span> <span class="toc-text">解决了什么问题？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%8E%E4%B9%88%E5%81%9A%E7%9A%84%EF%BC%9F"><span class="toc-number">1.3.</span> <span class="toc-text">怎么做的？</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Queries-over-Encrypted-Data"><span class="toc-number">2.</span> <span class="toc-text">Queries over Encrypted Data</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#SQL-aware-Encryption"><span class="toc-number">2.1.</span> <span class="toc-text">SQL-aware Encryption</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Adjustable-Query-based-Encryption"><span class="toc-number">2.2.</span> <span class="toc-text">Adjustable Query-based Encryption</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Executing-over-Encrypted-Data"><span class="toc-number">2.3.</span> <span class="toc-text">Executing over Encrypted Data</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/03/18/CryptDB-brief-description/" title="CryptDB 论文简述">CryptDB 论文简述</a><time datetime="2023-03-18T14:01:17.000Z" title="发表于 2023-03-18 22:01:17">2023-03-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/03/15/CMU-15-445-lecture-7/" title="CMU 15-445 lecture#7">CMU 15-445 lecture#7</a><time datetime="2023-03-15T13:54:48.000Z" title="发表于 2023-03-15 21:54:48">2023-03-15</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/03/11/CMU-15-445-lecture-6/" title="CMU 15-445 lecture#6">CMU 15-445 lecture#6</a><time datetime="2023-03-11T15:16:15.000Z" title="发表于 2023-03-11 23:16:15">2023-03-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/03/11/CMU-15-445-lecture-5/" title="CMU 15-445 lecture#5">CMU 15-445 lecture#5</a><time datetime="2023-03-11T15:15:35.000Z" title="发表于 2023-03-11 23:15:35">2023-03-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/03/11/CMU-15-445-lecture-4/" title="CMU 15-445 lecture#4">CMU 15-445 lecture#4</a><time datetime="2023-03-11T15:14:32.000Z" title="发表于 2023-03-11 23:14:32">2023-03-11</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Century</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
