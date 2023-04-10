@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://centurybbx.github.io/2023/04/10/enclave-native-encrypted-database/</loc>
+    
+    <lastmod>2023-04-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://centurybbx.github.io/2023/03/30/CMU-15-445-lecture-9/</loc>
     
     <lastmod>2023-03-30</lastmod>
@@ -130,7 +139,7 @@
 
   <url>
     <loc>http://centurybbx.github.io/</loc>
-    <lastmod>2023-04-04</lastmod>
+    <lastmod>2023-04-10</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -138,35 +147,56 @@
   
   <url>
     <loc>http://centurybbx.github.io/tags/database/</loc>
-    <lastmod>2023-04-04</lastmod>
+    <lastmod>2023-04-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://centurybbx.github.io/tags/lecture/</loc>
-    <lastmod>2023-04-04</lastmod>
+    <lastmod>2023-04-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://centurybbx.github.io/tags/encrypted-dabatase/</loc>
-    <lastmod>2023-04-04</lastmod>
+    <lastmod>2023-04-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://centurybbx.github.io/tags/paper/</loc>
-    <lastmod>2023-04-04</lastmod>
+    <lastmod>2023-04-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://centurybbx.github.io/tags/git/</loc>
-    <lastmod>2023-04-04</lastmod>
+    <lastmod>2023-04-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://centurybbx.github.io/tags/encrypted-database/</loc>
+    <lastmod>2023-04-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://centurybbx.github.io/tags/enclave-native/</loc>
+    <lastmod>2023-04-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://centurybbx.github.io/tags/TEE/</loc>
+    <lastmod>2023-04-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
@@ -175,21 +205,21 @@
   
   <url>
     <loc>http://centurybbx.github.io/categories/15445/</loc>
-    <lastmod>2023-04-04</lastmod>
+    <lastmod>2023-04-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://centurybbx.github.io/categories/research/</loc>
-    <lastmod>2023-04-04</lastmod>
+    <lastmod>2023-04-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://centurybbx.github.io/categories/tools/</loc>
-    <lastmod>2023-04-04</lastmod>
+    <lastmod>2023-04-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>

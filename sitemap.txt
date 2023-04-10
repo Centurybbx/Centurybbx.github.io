@@ -1,3 +1,4 @@
+http://centurybbx.github.io/2023/04/10/enclave-native-encrypted-database/
 http://centurybbx.github.io/2023/03/30/CMU-15-445-lecture-9/
 http://centurybbx.github.io/2023/03/30/CMU-15-445-project-1/
 http://centurybbx.github.io/2023/03/27/CMU-15-445-lecture-8/
@@ -18,6 +19,9 @@ http://centurybbx.github.io/tags/lecture/
 http://centurybbx.github.io/tags/encrypted-dabatase/
 http://centurybbx.github.io/tags/paper/
 http://centurybbx.github.io/tags/git/
+http://centurybbx.github.io/tags/encrypted-database/
+http://centurybbx.github.io/tags/enclave-native/
+http://centurybbx.github.io/tags/TEE/
 http://centurybbx.github.io/categories/15445/
 http://centurybbx.github.io/categories/research/
 http://centurybbx.github.io/categories/tools/
