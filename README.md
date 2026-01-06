@@ -1,5 +1,8 @@
 # Personal Website
 
+[![CI](https://github.com/Centurybbx/Centurybbx.github.io/actions/workflows/ci.yml/badge.svg)](https://github.com/Centurybbx/Centurybbx.github.io/actions/workflows/ci.yml)
+[![Deploy](https://github.com/Centurybbx/Centurybbx.github.io/actions/workflows/deploy.yml/badge.svg)](https://github.com/Centurybbx/Centurybbx.github.io/actions/workflows/deploy.yml)
+
 A minimal personal portfolio built with [Astro](https://astro.build), featuring a blog and game demos.
 
 ## Project Structure
@@ -57,11 +60,26 @@ Your content here...
 
 ## Deployment
 
-This project is configured for GitHub Pages:
+This project is configured for GitHub Pages with automatic deployment via GitHub Actions.
+
+### Automatic Deployment (Recommended)
+
+Push to `main` branch triggers the CI workflow, then the Deploy workflow runs automatically:
+
+1. **CI** - Runs linting and build verification
+2. **Deploy** - Deploys to GitHub Pages
+
+Check the [Actions](https://github.com/Centurybbx/Centurybbx.github.io/actions) tab for status.
+
+### Manual Deployment
 
 ```bash
 npm run build
 # Output goes to /dist - deploy to gh-pages branch
 ```
 
-Or use GitHub Actions to auto-deploy on push to main.
+### GitHub Pages Setup
+
+Ensure these settings in your repo Settings > Pages:
+- **Source**: GitHub Actions
+- **Build and deployment**: Configure as needed
