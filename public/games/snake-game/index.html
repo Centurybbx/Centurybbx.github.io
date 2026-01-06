@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Snake Game</title>
+  <style>
+    body {
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: #1a1a1a;
+      color: #fff;
+      font-family: system-ui, sans-serif;
+    }
+    .game-container {
+      text-align: center;
+    }
+    canvas {
+      border: 2px solid #333;
+      border-radius: 4px;
+    }
+    p {
+      color: #888;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="game-container">
+    <h2>Snake Game</h2>
+    <canvas id="game" width="400" height="400"></canvas>
+    <p>Use arrow keys to move</p>
+  </div>
+  <script>
+    // Minimal placeholder game
+    const canvas = document.getElementById('game');
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#333';
+    ctx.fillRect(0, 0, 400, 400);
+    ctx.fillStyle = '#4ade80';
+    ctx.fillRect(180, 180, 40, 40);
+  </script>
+</body>
+</html>

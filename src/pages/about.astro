@@ -1,0 +1,182 @@
+---
+/* ===========================================
+   About Page (/about)
+   ===========================================
+
+   Design:
+   - Minimal, personal introduction
+   - Focus on interests and mindset
+   - Clean layout with good typography
+   - No resume details (keeps it personal)
+
+   Future enhancements:
+   - Add photo
+   - Add "now playing" section
+   - Add favorite tools/tech stack
+   - Add travel/location info
+*/
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="About" activePage="about">
+  <article class="about-content">
+    <header class="page-header">
+      <h1>About</h1>
+    </header>
+
+    <section class="intro">
+      <p class="lead">
+        Hi, I'm Centurybbx. I'm a developer who enjoys building things that live on the web.
+      </p>
+      <p>
+        My focus is on creating clean, functional interfaces that work well for everyone.
+        I believe that good software is not just about code — it's about understanding the
+        problem you're solving and the people you're solving it for.
+      </p>
+    </section>
+
+    <section class="interests">
+      <h2>What I'm Into</h2>
+      <div class="interests-grid">
+        <div class="interest-item">
+          <h3>Building Games</h3>
+          <p>
+            I love creating browser-based games. There's something satisfying about
+            turning an idea into something interactive that others can play.
+          </p>
+        </div>
+
+        <div class="interest-item">
+          <h3>Clean Code</h3>
+          <p>
+            I care about code that reads well and is easy to maintain. Not everything
+            needs to be clever — clarity wins in the long run.
+          </p>
+        </div>
+
+        <div class="interest-item">
+          <h3>Learning</h3>
+          <p>
+            The web moves fast, and I enjoy staying curious. Whether it's a new
+            framework, a different approach, or something entirely new.
+          </p>
+        </div>
+
+        <div class="interest-item">
+          <h3>Design Details</h3>
+          <p>
+            Small things matter. Proper spacing, consistent typography, and thoughtful
+            interactions make experiences feel polished.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="mindset">
+      <h2>My Mindset</h2>
+      <blockquote>
+        <p>
+          "Done is better than perfect" — but "perfect" is a moving target anyway.
+          Ship early, iterate often, and keep learning.
+        </p>
+      </blockquote>
+      <p>
+        I believe in shipping work that you're proud of, even if it's not perfect.
+        The best software comes from continuous improvement, not endless planning.
+      </p>
+    </section>
+
+    <section class="connect">
+      <h2>Connect</h2>
+      <p>
+        Feel free to reach out if you want to chat about projects, ideas, or just say hi.
+      </p>
+      <div class="connect-links">
+        <a href="https://github.com/Centurybbx" target="_blank" rel="noopener noreferrer" class="btn">
+          GitHub
+        </a>
+        <!-- Add more social links as needed -->
+      </div>
+    </section>
+  </article>
+</BaseLayout>
+
+<style>
+  .about-content {
+    max-width: 680px;
+  }
+
+  .page-header {
+    margin-bottom: var(--space-xl);
+  }
+
+  .intro {
+    margin-bottom: var(--space-2xl);
+  }
+
+  .lead {
+    font-size: 1.25rem;
+    line-height: 1.7;
+    margin-bottom: var(--space-md);
+  }
+
+  .interests {
+    margin-bottom: var(--space-2xl);
+  }
+
+  .interests h2 {
+    margin-bottom: var(--space-lg);
+  }
+
+  .interests-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--space-lg);
+  }
+
+  .interest-item {
+    padding: var(--space-lg);
+    background: var(--color-card-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+  }
+
+  .interest-item h3 {
+    font-size: 1.1rem;
+    margin-bottom: var(--space-sm);
+  }
+
+  .interest-item p {
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+    margin-bottom: 0;
+  }
+
+  .mindset {
+    margin-bottom: var(--space-2xl);
+  }
+
+  .mindset h2 {
+    margin-bottom: var(--space-lg);
+  }
+
+  .mindset blockquote {
+    border-left: 3px solid var(--color-accent);
+    padding-left: var(--space-lg);
+    margin: var(--space-lg) 0;
+    font-size: 1.1rem;
+    font-style: italic;
+    color: var(--color-text-muted);
+  }
+
+  .connect h2 {
+    margin-bottom: var(--space-md);
+  }
+
+  .connect-links {
+    display: flex;
+    gap: var(--space-md);
+    margin-top: var(--space-lg);
+  }
+</style>
