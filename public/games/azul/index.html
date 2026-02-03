@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Azul: Elegant AI Duel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <noscript>This app requires JavaScript to run.</noscript>
+  <div id="app" class="app">
+    <header class="header">
+      <div>
+        <p class="kicker" id="header-kicker">Azul / Palace of Tiles</p>
+        <h1 class="title" id="header-title">Azul: Elegant AI Duel</h1>
+        <p class="subtitle" id="header-subtitle">Draft tiles, build your wall, and outscore the AI.</p>
+      </div>
+      <div class="header-actions">
+        <button class="btn" type="button" data-action="new-game" id="btn-new-game">New Game</button>
+        <button class="btn ghost" type="button" data-action="open-rules" id="btn-rules">Rules</button>
+        <button class="btn ghost" type="button" data-action="toggle-sound" id="btn-sound">Sound: Off</button>
+        <button class="btn ghost" type="button" data-action="toggle-lang" id="btn-lang">中文</button>
+      </div>
+    </header>
+
+    <section id="status-bar" class="status-bar"></section>
+    <section id="guide" class="guide"></section>
+    <section id="mobile-switch" class="mobile-switch">
+      <button class="tab" type="button" data-action="switch-board" data-board="PLAYER" id="tab-player">You</button>
+      <button class="tab" type="button" data-action="switch-board" data-board="AI" id="tab-ai">AI</button>
+    </section>
+
+    <main class="board">
+      <section id="player-area" class="player-area"></section>
+      <section id="ai-area" class="player-area ai"></section>
+    </main>
+
+    <section class="table">
+      <div class="table-header">
+        <h2 id="factories-title">Factories</h2>
+        <p id="factories-subtitle">Pick a tile color from a factory or the center.</p>
+      </div>
+      <div id="factories" class="factories"></div>
+      <div id="center" class="center-area"></div>
+    </section>
+
+    <section id="controls" class="controls"></section>
+
+    <section class="log">
+      <div class="log-header">
+        <h2 id="log-title">Match Log</h2>
+        <span class="log-hint" id="log-hint">Most recent first</span>
+      </div>
+      <div id="log" class="log-body"></div>
+    </section>
+  </div>
+
+  <div id="overlay" class="overlay hidden"></div>
+
+  <div id="rules-modal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="rules-title">Quick Rules</h3>
+        <button class="icon-btn" type="button" data-action="close-rules" aria-label="Close" id="rules-close">Close</button>
+      </div>
+      <div class="modal-body" id="rules-body">
+        <p>On your turn, take all tiles of one color from a factory or the center. If you take from the center first, you also take the first-player token (counts as a floor penalty).</p>
+        <p>Place tiles into a single pattern line. If the line is full, one tile moves to the wall during tiling. Extra tiles overflow to the floor.</p>
+        <p>Scoring happens during wall tiling. Adjacent tiles score by line length horizontally and vertically. Floor tiles apply penalties.</p>
+        <p>The game ends when any player completes a full row on their wall. Final bonuses apply for rows, columns, and complete colors.</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="difficulty-modal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="difficulty-title">Choose Difficulty</h3>
+      </div>
+      <div class="modal-body" id="difficulty-body"></div>
+      <div class="modal-footer">
+        <button class="btn" type="button" data-action="start-game" id="btn-start">Start</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
