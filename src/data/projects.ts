@@ -36,30 +36,13 @@ export async function getProjects(): Promise<Project[]> {
   // or read from a CMS/API
   return [
     {
-      id: 'snake-game',
-      title: 'Snake Game',
-      description: 'Classic Snake game built with React. Eat food, grow longer, avoid walls.',
-      longDescription: 'A modern take on the classic Snake game. Built with React and Canvas API for smooth 60fps gameplay. Features keyboard controls, score tracking, and responsive design.',
-      tech: ['React', 'Canvas API', 'TypeScript'],
-      demoUrl: '/games/snake-game/index.html',
-      isGame: true
-    },
-    {
-      id: 'memory-match',
-      title: 'Memory Match',
-      description: 'Test your memory with this card matching game. Find all pairs to win.',
-      longDescription: 'A fun memory card game where players flip cards to find matching pairs. Built with React, featuring animations, move counter, and multiple difficulty levels.',
-      tech: ['React', 'CSS Animations', 'JavaScript'],
-      demoUrl: '/games/memory-match/index.html',
-      isGame: true
-    },
-    {
-      id: 'tetris-clone',
-      title: 'Tetris Clone',
-      description: 'The classic block-stacking puzzle game. Clear lines to score points.',
-      longDescription: 'A faithful recreation of the classic Tetris experience. Features all the familiar pieces, scoring system, and increasing difficulty as you progress.',
-      tech: ['React', 'Canvas API', 'Game Logic'],
-      demoUrl: '/games/tetris-clone/index.html',
+      id: 'azul',
+      title: 'Azul（花砖物语）',
+      description: 'Draft tiles, build your wall, and outscore the AI — playable in your browser.',
+      longDescription:
+        '一个可在 Web 直接游玩的 Azul（花砖物语）对战小游戏：轮流从工坊/中心选择颜色，填充花纹行并在铺墙阶段计分。内置 AI 难度选择、回合日志与中英文切换。',
+      tech: ['JavaScript', 'HTML', 'CSS'],
+      demoUrl: '/games/azul/index.html',
       isGame: true
     }
   ];
