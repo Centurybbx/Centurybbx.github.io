@@ -33,6 +33,20 @@ const I18N = {
     headerKicker: "Azul / Palace of Tiles",
     headerTitle: "Azul: Elegant AI Duel",
     headerSubtitle: "Draft tiles, build your wall, and outscore the AI.",
+    introSubtitle: "Draft tiles. Build your wall. Outscore the AI.",
+    introRule1Title: "Draft",
+    introRule1Body: "Take all tiles of one color from a factory or the center.",
+    introRule2Title: "Plan",
+    introRule2Body: "Place tiles into one pattern line. Overflows go to the floor (penalty).",
+    introRule3Title: "Score",
+    introRule3Body: "Complete a line to move one tile to the wall and score adjacency.",
+    btnContinue: "Continue",
+    btnBack: "Back",
+    difficultySubtitle: "Pick a pace and play style.",
+    hudNew: "New",
+    hudRules: "Rules",
+    hudSound: "Sound",
+    hudLang: "Lang",
     btnNewGame: "New Game",
     btnRules: "Rules",
     btnLang: "中文",
@@ -102,6 +116,7 @@ const I18N = {
     logSelected: "Selected {count} {color} tiles. Choose a pattern line.",
     logPlaced: "You placed {count} {color} tiles on line {line}.",
     logNoValid: "No valid pattern line. {count} {color} tiles go to the floor.",
+    logNoValidPrompt: "No valid pattern line for {count} {color}. Click the floor to accept, or press Esc to cancel.",
     logFinishSelection: "Finish placing your current selection.",
     logInvalidLine: "That line is not valid for this color.",
     logRoundStart: "Round {round} begins. {player} start.",
@@ -121,6 +136,20 @@ const I18N = {
     headerKicker: "Azul / 花砖物语",
     headerTitle: "花砖物语：AI 对战版",
     headerSubtitle: "选取瓷砖，铺设墙面，击败 AI。",
+    introSubtitle: "选取花砖，铺设墙面，击败 AI。",
+    introRule1Title: "拿取",
+    introRule1Body: "从工厂或中央拿取一种颜色的全部花砖。",
+    introRule2Title: "放置",
+    introRule2Body: "将花砖放入一条花纹排；溢出进入地板并扣分。",
+    introRule3Title: "计分",
+    introRule3Body: "花纹排填满后铺到墙面，按相邻连线即时计分。",
+    btnContinue: "继续",
+    btnBack: "返回",
+    difficultySubtitle: "选择节奏与对手风格。",
+    hudNew: "新局",
+    hudRules: "规则",
+    hudSound: "音效",
+    hudLang: "语言",
     btnNewGame: "新游戏",
     btnRules: "规则",
     btnLang: "English",
@@ -190,6 +219,7 @@ const I18N = {
     logSelected: "已选 {count} 枚{color}，请选择花纹排。",
     logPlaced: "你将 {count} 枚{color} 放入第 {line} 行。",
     logNoValid: "无可用花纹排，{count} 枚{color} 进入地板。",
+    logNoValidPrompt: "{count} 枚{color} 无可用花纹排：点击地板确认进入地板，或按 Esc 取消。",
     logFinishSelection: "请先完成当前放置。",
     logInvalidLine: "该行不符合当前颜色。",
     logRoundStart: "第 {round} 回合开始，由{player}先手。",
@@ -222,11 +252,10 @@ const state = {
   aiDifficulty: "medium",
   pendingDifficulty: "medium",
   language: "en",
-  stage: "RULES",
-  zenMode: false,
+  stage: "INTRO",
   audioEnabled: false,
   activeBoard: "PLAYER",
-  isMobile: false,
+  hudMenuOpen: false,
   aiThinking: false,
   log: [],
   players: {
@@ -240,34 +269,50 @@ const state = {
 
 const elements = {
   app: document.getElementById("app"),
-  status: document.getElementById("status-bar"),
-  guide: document.getElementById("guide"),
+  screenIntro: document.getElementById("screen-intro"),
+  screenDifficulty: document.getElementById("screen-difficulty"),
+  screenGame: document.getElementById("screen-game"),
+
+  introKicker: document.getElementById("intro-kicker"),
+  introTitle: document.getElementById("intro-title"),
+  introSubtitle: document.getElementById("intro-subtitle"),
+  introRule1Title: document.getElementById("intro-rule-1-title"),
+  introRule1Body: document.getElementById("intro-rule-1-body"),
+  introRule2Title: document.getElementById("intro-rule-2-title"),
+  introRule2Body: document.getElementById("intro-rule-2-body"),
+  introRule3Title: document.getElementById("intro-rule-3-title"),
+  introRule3Body: document.getElementById("intro-rule-3-body"),
+  btnContinue: document.getElementById("btn-continue"),
+  btnBack: document.getElementById("btn-back"),
+
   playerArea: document.getElementById("player-area"),
   aiArea: document.getElementById("ai-area"),
   factories: document.getElementById("factories"),
   center: document.getElementById("center"),
-  controls: document.getElementById("controls"),
-  log: document.getElementById("log"),
   overlay: document.getElementById("overlay"),
   rulesModal: document.getElementById("rules-modal"),
-  difficultyModal: document.getElementById("difficulty-modal"),
-  headerKicker: document.getElementById("header-kicker"),
-  headerTitle: document.getElementById("header-title"),
-  headerSubtitle: document.getElementById("header-subtitle"),
+
   btnNewGame: document.getElementById("btn-new-game"),
   btnRules: document.getElementById("btn-rules"),
-  btnSound: document.getElementById("btn-sound"),
-  btnLang: document.getElementById("btn-lang"),
+  btnSoundIntro: document.getElementById("btn-sound"),
+  btnSoundDifficulty: document.getElementById("btn-sound-2"),
+  btnSoundHud: document.getElementById("btn-sound-3"),
+  btnLangIntro: document.getElementById("btn-lang"),
+  btnLangDifficulty: document.getElementById("btn-lang-2"),
+  btnLangHud: document.getElementById("btn-lang-3"),
+  hudMenu: document.getElementById("hud-menu"),
+  hudMenuToggle: document.getElementById("hud-menu-toggle"),
+  hudActions: document.getElementById("hud-actions"),
+
   rulesTitle: document.getElementById("rules-title"),
   rulesClose: document.getElementById("rules-close"),
   rulesBody: document.getElementById("rules-body"),
+
   difficultyTitle: document.getElementById("difficulty-title"),
+  difficultySubtitle: document.getElementById("difficulty-subtitle"),
   difficultyBody: document.getElementById("difficulty-body"),
   btnStart: document.getElementById("btn-start"),
-  factoriesTitle: document.getElementById("factories-title"),
-  factoriesSubtitle: document.getElementById("factories-subtitle"),
-  logTitle: document.getElementById("log-title"),
-  logHint: document.getElementById("log-hint"),
+
   mobileSwitch: document.getElementById("mobile-switch"),
   tabPlayer: document.getElementById("tab-player"),
   tabAI: document.getElementById("tab-ai"),
@@ -337,24 +382,42 @@ function colorName(color) {
 
 function applyStaticText() {
   const dict = I18N[state.language];
-  elements.headerKicker.textContent = dict.headerKicker;
-  elements.headerTitle.textContent = dict.headerTitle;
-  elements.headerSubtitle.textContent = dict.headerSubtitle;
-  elements.btnNewGame.textContent = dict.btnNewGame;
-  elements.btnRules.textContent = dict.btnRules;
-  elements.btnSound.textContent = state.audioEnabled ? dict.btnSoundOn : dict.btnSoundOff;
-  elements.btnLang.textContent = dict.btnLang;
+  const soundLabel = state.audioEnabled ? dict.btnSoundOn : dict.btnSoundOff;
+
+  if (elements.introKicker) elements.introKicker.textContent = dict.headerKicker;
+  if (elements.introTitle) elements.introTitle.textContent = dict.headerTitle;
+  if (elements.introSubtitle) elements.introSubtitle.textContent = dict.introSubtitle || dict.headerSubtitle;
+  if (elements.introRule1Title) elements.introRule1Title.textContent = dict.introRule1Title || "Draft";
+  if (elements.introRule1Body) elements.introRule1Body.textContent = dict.introRule1Body || "";
+  if (elements.introRule2Title) elements.introRule2Title.textContent = dict.introRule2Title || "Plan";
+  if (elements.introRule2Body) elements.introRule2Body.textContent = dict.introRule2Body || "";
+  if (elements.introRule3Title) elements.introRule3Title.textContent = dict.introRule3Title || "Score";
+  if (elements.introRule3Body) elements.introRule3Body.textContent = dict.introRule3Body || "";
+
+  if (elements.btnContinue) elements.btnContinue.textContent = dict.btnContinue || "Continue";
+  if (elements.btnBack) elements.btnBack.textContent = dict.btnBack || "Back";
+
+  if (elements.difficultyTitle) elements.difficultyTitle.textContent = dict.difficultyTitle;
+  if (elements.difficultySubtitle)
+    elements.difficultySubtitle.textContent = dict.difficultySubtitle || "";
+  if (elements.btnStart) elements.btnStart.textContent = dict.difficultyStart;
+
+  if (elements.btnNewGame) elements.btnNewGame.textContent = dict.hudNew || "New";
+  if (elements.btnRules) elements.btnRules.textContent = dict.hudRules || dict.btnRules;
+
+  if (elements.btnSoundIntro) elements.btnSoundIntro.textContent = soundLabel;
+  if (elements.btnSoundDifficulty) elements.btnSoundDifficulty.textContent = soundLabel;
+  if (elements.btnSoundHud) elements.btnSoundHud.textContent = dict.hudSound || soundLabel;
+
+  if (elements.btnLangIntro) elements.btnLangIntro.textContent = dict.btnLang;
+  if (elements.btnLangDifficulty) elements.btnLangDifficulty.textContent = dict.btnLang;
+  if (elements.btnLangHud) elements.btnLangHud.textContent = dict.hudLang || dict.btnLang;
+
   elements.rulesTitle.textContent = dict.rulesTitle;
   elements.rulesClose.textContent = dict.rulesClose;
   elements.rulesBody.innerHTML = dict.rulesBody.map((line) => `<p>${line}</p>`).join("");
-  elements.difficultyTitle.textContent = dict.difficultyTitle;
-  elements.btnStart.textContent = dict.difficultyStart;
-  elements.factoriesTitle.textContent = dict.factoriesTitle;
-  elements.factoriesSubtitle.textContent = dict.factoriesSubtitle;
-  elements.logTitle.textContent = dict.logTitle;
-  elements.logHint.textContent = dict.logHint;
-  elements.tabPlayer.textContent = dict.playerName;
-  elements.tabAI.textContent = dict.aiName;
+  if (elements.tabPlayer) elements.tabPlayer.textContent = dict.playerName;
+  if (elements.tabAI) elements.tabAI.textContent = dict.aiName;
   document.title = dict.headerTitle;
   renderDifficultyModal();
 }
@@ -541,6 +604,38 @@ function takeFromCenter(color) {
   return { picked, tookToken };
 }
 
+function previewPick(source, sourceId, color) {
+  if (source === "factory") {
+    const index = Number(sourceId);
+    if (!Number.isFinite(index)) return 0;
+    const tiles = state.factories[index] || [];
+    return tiles.reduce((count, tile) => (tile === color ? count + 1 : count), 0);
+  }
+  if (source === "center") {
+    return state.center.reduce((count, tile) => (tile === color ? count + 1 : count), 0);
+  }
+  return 0;
+}
+
+function confirmPick(pendingSelection) {
+  if (!pendingSelection) return null;
+  let result;
+  if (pendingSelection.source === "factory") {
+    const index = Number(pendingSelection.sourceId);
+    if (!Number.isFinite(index)) return null;
+    result = takeFromFactory(index, pendingSelection.color);
+  } else {
+    result = takeFromCenter(pendingSelection.color);
+  }
+  return {
+    color: pendingSelection.color,
+    count: result.picked.length,
+    tookToken: result.tookToken,
+    source: pendingSelection.source,
+    sourceId: pendingSelection.sourceId ?? null,
+  };
+}
+
 function addTilesToFloor(player, tiles) {
   tiles.forEach((tile) => {
     if (player.floor.length < 7) {
@@ -551,9 +646,8 @@ function addTilesToFloor(player, tiles) {
   });
 }
 
-function applySelectionToLine(playerId, lineIndex) {
+function applySelectionToLine(playerId, lineIndex, selection) {
   const player = state.players[playerId];
-  const selection = state.pendingSelection;
   if (!selection) return;
   const line = player.patternLines[lineIndex];
   const space = line.length - line.count;
@@ -577,7 +671,6 @@ function applySelectionToLine(playerId, lineIndex) {
     patternLineIndex: lineIndex,
     floorPlayerId: overflow > 0 || selection.tookToken ? playerId : null,
   });
-  state.pendingSelection = null;
   addLog(
     t("logPlaced", {
       count: selection.count,
@@ -813,9 +906,6 @@ function queueAIMove() {
   if (state.phase !== "TILE_PICKING" || state.stage !== "PLAY") return;
   if (state.currentPlayer !== "AI") return;
   state.aiThinking = true;
-  if (state.isMobile) {
-    setActiveBoard("AI");
-  }
   render();
   const delay = state.aiDifficulty === "easy" ? 700 : state.aiDifficulty === "hard" ? 1500 : 1100;
   setTimeout(() => {
@@ -1040,45 +1130,38 @@ function runAIMove() {
 function handleTileSelection(source, sourceId, color) {
   if (state.phase !== "TILE_PICKING" || state.stage !== "PLAY") return;
   if (state.currentPlayer !== "PLAYER" || state.aiThinking) return;
-  if (state.pendingSelection) {
-    addLog(t("logFinishSelection"));
+  const normalizedSourceId = source === "factory" ? Number(sourceId) : null;
+  if (source === "factory" && !Number.isFinite(normalizedSourceId)) return;
+  if (
+    state.pendingSelection &&
+    state.pendingSelection.source === source &&
+    (state.pendingSelection.sourceId ?? null) === normalizedSourceId &&
+    state.pendingSelection.color === color
+  ) {
+    state.pendingSelection = null;
+    render();
     return;
   }
 
-  let result;
-  if (source === "factory") {
-    result = takeFromFactory(Number(sourceId), color);
-  } else {
-    result = takeFromCenter(color);
-  }
-
-  if (result.picked.length === 0) return;
+  const previewCount = previewPick(source, normalizedSourceId, color);
+  if (previewCount === 0) return;
 
   const player = state.players.PLAYER;
   const validLines = validLinesForColor(player, color);
   const selection = {
     color,
-    count: result.picked.length,
-    tookToken: result.tookToken,
+    count: previewCount,
+    tookToken: false,
     validLines,
+    allowFloor: validLines.length === 0,
     source,
-    sourceId,
+    sourceId: normalizedSourceId,
   };
 
-  if (state.isMobile) {
-    setActiveBoard("PLAYER");
-  }
-  playSfx("pick");
-
-  if (validLines.length === 0) {
-    applySelectionToFloor("PLAYER", selection);
-    render();
-    return;
-  }
-
   state.pendingSelection = selection;
+  playSfx("pick");
   addLog(
-    t("logSelected", {
+    t(selection.allowFloor ? "logNoValidPrompt" : "logSelected", {
       count: selection.count,
       color: colorName(color),
     })
@@ -1094,61 +1177,28 @@ function handleLineSelection(lineIndex) {
     addLog(t("logInvalidLine"));
     return;
   }
-  applySelectionToLine("PLAYER", lineIndex);
+  const confirmed = confirmPick(selection);
+  state.pendingSelection = null;
+  if (!confirmed || confirmed.count === 0) {
+    render();
+    return;
+  }
+  applySelectionToLine("PLAYER", lineIndex, confirmed);
   render();
 }
 
-function renderStatus() {
-  const isPlaying = state.stage === "PLAY";
-  const turnLabel = isPlaying
-    ? state.currentPlayer === "PLAYER"
-      ? t("turnPlayer")
-      : t("turnAI")
-    : t("statusSetup");
-  const phaseLabel = isPlaying ? (state.phase === "TILE_PICKING" ? t("phaseTile") : state.phase) : t("statusSetup");
-  const pending = state.pendingSelection
-    ? t("selectionPending", {
-        count: state.pendingSelection.count,
-        color: colorName(state.pendingSelection.color),
-      })
-    : t("selectionNone");
-  const thinking = state.aiThinking ? t("selectionAI") : pending;
-  const selectionLabel = isPlaying ? (state.aiThinking ? thinking : pending) : t("statusSetup");
-  elements.status.innerHTML = `
-    <div class="status-card">
-      <strong>${t("statusRound")}</strong>
-      <span>${state.round}</span>
-    </div>
-    <div class="status-card">
-      <strong>${t("statusTurn")}</strong>
-      <span>${turnLabel}</span>
-    </div>
-    <div class="status-card">
-      <strong>${t("statusPhase")}</strong>
-      <span>${phaseLabel}</span>
-    </div>
-    <div class="status-card">
-      <strong>${t("statusSelection")}</strong>
-      <span>${selectionLabel}</span>
-    </div>
-  `;
-}
-
-function getGuideMessage() {
-  if (state.stage === "RULES") return t("hintRules");
-  if (state.stage === "DIFFICULTY") return t("hintDifficulty");
-  if (state.stage !== "PLAY") return "";
-  if (state.aiThinking || state.currentPlayer === "AI") return t("hintAITurn");
-  if (state.pendingSelection) return t("hintChooseLine");
-  return t("hintPickSource");
-}
-
-function renderGuide() {
-  const message = getGuideMessage();
-  elements.guide.innerHTML = `
-    <strong>${t("labelGuide")}</strong>
-    <span>${message}</span>
-  `;
+function handleFloorConfirm() {
+  if (state.stage !== "PLAY") return;
+  if (!state.pendingSelection) return;
+  if (!state.pendingSelection.allowFloor) return;
+  const confirmed = confirmPick(state.pendingSelection);
+  state.pendingSelection = null;
+  if (!confirmed || confirmed.count === 0) {
+    render();
+    return;
+  }
+  applySelectionToFloor("PLAYER", confirmed);
+  render();
 }
 
 function setActiveBoard(board) {
@@ -1161,6 +1211,20 @@ function renderMobileSwitch() {
   const active = state.activeBoard;
   elements.tabPlayer.classList.toggle("active", active === "PLAYER");
   elements.tabAI.classList.toggle("active", active === "AI");
+}
+
+function setHudMenuOpen(open) {
+  state.hudMenuOpen = Boolean(open);
+  if (elements.hudMenu) {
+    elements.hudMenu.dataset.open = state.hudMenuOpen ? "1" : "0";
+  }
+  if (elements.hudMenuToggle) {
+    elements.hudMenuToggle.setAttribute("aria-expanded", state.hudMenuOpen ? "true" : "false");
+  }
+}
+
+function isCompactLayout() {
+  return window.matchMedia("(max-width: 820px), (max-height: 720px)").matches;
 }
 
 function renderWall(player, playerId) {
@@ -1235,10 +1299,13 @@ function renderPatternLines(player, isHuman, playerId) {
   `;
 }
 
-function renderFloor(player, playerId) {
+function renderFloor(player, playerId, isHuman) {
   const isAnimated = state.animation && state.animation.floorPlayerId === playerId;
+  const isSelectable = Boolean(isHuman && state.pendingSelection && state.pendingSelection.allowFloor);
   return `
-    <div class="floor-line ${isAnimated ? "animate" : ""}">
+    <div class="floor-line ${isAnimated ? "animate" : ""} ${isSelectable ? "selectable" : ""}" ${
+      isSelectable ? `data-action="choose-floor"` : ""
+    }>
       ${FLOOR_PENALTIES.map((penalty, index) => {
         const tile = player.floor[index];
         let content = `${penalty}`;
@@ -1273,9 +1340,11 @@ function renderPlayerArea(playerId, isHuman) {
         <div class="badge">${t("labelColors")} ${colors}</div>
       </div>
     </div>
-    ${renderWall(player, playerId)}
-    ${renderPatternLines(player, isHuman, playerId)}
-    ${renderFloor(player, playerId)}
+    <div class="player-grid">
+      <div class="player-wall">${renderWall(player, playerId)}</div>
+      <div class="player-pattern">${renderPatternLines(player, isHuman, playerId)}</div>
+      <div class="player-floor">${renderFloor(player, playerId, isHuman)}</div>
+    </div>
   `;
 }
 
@@ -1292,14 +1361,20 @@ function renderFactories() {
         state.animation &&
         state.animation.source === "factory" &&
         Number(state.animation.sourceId) === index;
+      const isSelectedFactory =
+        state.pendingSelection &&
+        state.pendingSelection.source === "factory" &&
+        Number(state.pendingSelection.sourceId) === index;
       const hasTiles = factory.length > 0;
       const tileHtml = tiles
         .map((tile) => {
           if (!tile) {
             return `<div class="tile empty"></div>`;
           }
+          const isSelectedTile =
+            isSelectedFactory && state.pendingSelection && state.pendingSelection.color === tile;
           return `
-            <button class="tile-button" data-action="select-tile" data-source="factory" data-id="${index}" data-color="${tile}">
+            <button class="tile-button ${isSelectedTile ? "selected" : ""}" data-action="select-tile" data-source="factory" data-id="${index}" data-color="${tile}">
               <div class="tile color-${tile}"></div>
             </button>
           `;
@@ -1308,7 +1383,7 @@ function renderFactories() {
       return `
         <div class="factory ${shouldHintSources && hasTiles ? "hint" : ""} ${
         isFlash ? "flash" : ""
-      }">
+      } ${isSelectedFactory ? "selected" : ""}">
           <div class="factory-grid">${tileHtml}</div>
           <div class="factory-label">${t("labelFactory")} ${index + 1}</div>
         </div>
@@ -1333,10 +1408,14 @@ function renderCenter() {
         state.animation &&
         state.animation.source === "center" &&
         state.animation.sourceColor === color;
+      const isSelectedStack =
+        state.pendingSelection &&
+        state.pendingSelection.source === "center" &&
+        state.pendingSelection.color === color;
       return `
         <div class="center-stack ${shouldHintSources ? "hint" : ""} ${
         isFlash ? "flash" : ""
-      }" data-action="select-tile" data-source="center" data-color="${color}">
+      } ${isSelectedStack ? "selected" : ""}" data-action="select-tile" data-source="center" data-color="${color}">
           <div class="tile small color-${color}"></div>
           <div class="count">x${counts[color]}</div>
         </div>
@@ -1358,26 +1437,6 @@ function renderCenter() {
   `;
 }
 
-function renderControls() {
-  elements.controls.innerHTML = `
-    <div class="control-group">
-      <label for="difficulty">${t("controlsDifficulty")}</label>
-      <select id="difficulty" class="select" data-action="set-difficulty">
-        <option value="easy" ${state.aiDifficulty === "easy" ? "selected" : ""}>${t("aiEasy")}</option>
-        <option value="medium" ${state.aiDifficulty === "medium" ? "selected" : ""}>${t("aiMedium")}</option>
-        <option value="hard" ${state.aiDifficulty === "hard" ? "selected" : ""}>${t("aiHard")}</option>
-      </select>
-    </div>
-    <div class="control-group">
-      <span>${state.pendingSelection ? t("controlsHintChoose") : t("controlsHintPick")}</span>
-    </div>
-  `;
-}
-
-function renderLog() {
-  elements.log.innerHTML = state.log.map((entry) => `<div class="log-entry">${entry}</div>`).join("");
-}
-
 function showGameOver(winner) {
   const playerScore = state.players.PLAYER.score;
   const aiScore = state.players.AI.score;
@@ -1387,7 +1446,6 @@ function showGameOver(winner) {
   const playerBonus = summary.PLAYER ? summary.PLAYER.bonus : 0;
   const aiBonus = summary.AI ? summary.AI.bonus : 0;
   state.stage = "GAME_OVER";
-  state.zenMode = false;
   playSfx("end");
   elements.overlay.innerHTML = `
     <div class="overlay-card">
@@ -1408,15 +1466,17 @@ function hideGameOver() {
 }
 
 function render() {
-  renderStatus();
-  renderGuide();
+  // Only the game screen needs dynamic rendering.
+  if (state.stage !== "PLAY" && state.stage !== "GAME_OVER") {
+    elements.app.dataset.activeBoard = state.activeBoard;
+    renderMobileSwitch();
+    return;
+  }
+
   elements.playerArea.innerHTML = renderPlayerArea("PLAYER", true);
   elements.aiArea.innerHTML = renderPlayerArea("AI", false);
   renderFactories();
   renderCenter();
-  renderControls();
-  renderLog();
-  elements.app.classList.toggle("zen", state.zenMode);
   elements.app.dataset.activeBoard = state.activeBoard;
   renderMobileSwitch();
 }
@@ -1425,47 +1485,49 @@ function openRules() {
   elements.rulesModal.classList.remove("hidden");
 }
 
-function closeRules({ advance } = {}) {
+function closeRules() {
   elements.rulesModal.classList.add("hidden");
-  if (advance && state.stage === "RULES") {
-    openDifficulty();
-    state.stage = "DIFFICULTY";
-    renderGuide();
-    render();
-  }
 }
 
-function openDifficulty() {
+function showScreen(screen) {
+  elements.app.dataset.screen = screen;
+  elements.screenIntro.classList.toggle("hidden", screen !== "intro");
+  elements.screenDifficulty.classList.toggle("hidden", screen !== "difficulty");
+  elements.screenGame.classList.toggle("hidden", screen !== "game");
+  setHudMenuOpen(false);
+}
+
+function goIntro() {
+  state.stage = "INTRO";
+  hideGameOver();
+  closeRules();
+  showScreen("intro");
+}
+
+function goDifficulty() {
+  state.stage = "DIFFICULTY";
+  hideGameOver();
+  closeRules();
+  state.pendingSelection = null;
+  state.aiThinking = false;
   renderDifficultyModal();
-  elements.difficultyModal.classList.remove("hidden");
-}
-
-function closeDifficulty() {
-  elements.difficultyModal.classList.add("hidden");
+  showScreen("difficulty");
 }
 
 function startMatch() {
   state.aiDifficulty = state.pendingDifficulty;
-  closeDifficulty();
-  state.stage = "PLAY";
-  state.zenMode = true;
   state.activeBoard = "PLAYER";
+  state.stage = "PLAY";
+  showScreen("game");
   startNewGame();
-  renderGuide();
 }
 
 function setupLobby() {
-  state.stage = "RULES";
-  state.zenMode = false;
   state.pendingDifficulty = state.aiDifficulty;
   state.activeBoard = "PLAYER";
-  hideGameOver();
-  closeDifficulty();
   startNewGame({ silent: true });
   state.log = [];
-  render();
-  openRules();
-  renderGuide();
+  goIntro();
 }
 
 function handleClick(event) {
@@ -1474,62 +1536,64 @@ function handleClick(event) {
   const target = origin.closest("[data-action]");
   if (!target) return;
   const action = target.dataset.action;
-  if (action === "new-game") {
-    hideGameOver();
-    state.stage = "DIFFICULTY";
-    state.zenMode = false;
-    state.aiThinking = false;
-    state.pendingSelection = null;
-    state.pendingDifficulty = state.aiDifficulty;
-    openDifficulty();
-    renderGuide();
-    render();
-    return;
+  const inHudMenu = Boolean(target.closest(".hud-menu"));
+  const closeHudAfter = inHudMenu && action !== "toggle-hud-menu";
+
+  switch (action) {
+    case "new-game":
+      goDifficulty();
+      break;
+    case "open-rules":
+      openRules();
+      break;
+    case "close-rules":
+      closeRules();
+      break;
+    case "toggle-lang":
+      setLanguage(state.language === "en" ? "zh" : "en");
+      break;
+    case "toggle-sound":
+      state.audioEnabled = !state.audioEnabled;
+      localStorage.setItem("azul-sound", state.audioEnabled ? "on" : "off");
+      applyStaticText();
+      if (state.audioEnabled) {
+        playSfx("pick");
+      }
+      break;
+    case "go-difficulty":
+      goDifficulty();
+      break;
+    case "go-intro":
+      goIntro();
+      break;
+    case "select-difficulty":
+      state.pendingDifficulty = target.dataset.level;
+      renderDifficultyModal();
+      break;
+    case "switch-board":
+      setActiveBoard(target.dataset.board);
+      break;
+    case "start-game":
+      startMatch();
+      break;
+    case "select-tile":
+      handleTileSelection(target.dataset.source, target.dataset.id, target.dataset.color);
+      break;
+    case "choose-line":
+      handleLineSelection(Number(target.dataset.line));
+      break;
+    case "choose-floor":
+      handleFloorConfirm();
+      break;
+    case "toggle-hud-menu":
+      setHudMenuOpen(!state.hudMenuOpen);
+      break;
+    default:
+      break;
   }
-  if (action === "open-rules") {
-    openRules();
-    return;
-  }
-  if (action === "close-rules") {
-    closeRules({ advance: state.stage === "RULES" });
-    return;
-  }
-  if (action === "toggle-lang") {
-    setLanguage(state.language === "en" ? "zh" : "en");
-    return;
-  }
-  if (action === "toggle-sound") {
-    state.audioEnabled = !state.audioEnabled;
-    localStorage.setItem("azul-sound", state.audioEnabled ? "on" : "off");
-    applyStaticText();
-    if (state.audioEnabled) {
-      playSfx("pick");
-    }
-    return;
-  }
-  if (action === "select-difficulty") {
-    state.pendingDifficulty = target.dataset.level;
-    renderDifficultyModal();
-    return;
-  }
-  if (action === "switch-board") {
-    setActiveBoard(target.dataset.board);
-    return;
-  }
-  if (action === "start-game") {
-    startMatch();
-    return;
-  }
-  if (action === "select-tile") {
-    const source = target.dataset.source;
-    const sourceId = target.dataset.id;
-    const color = target.dataset.color;
-    handleTileSelection(source, sourceId, color);
-    return;
-  }
-  if (action === "choose-line") {
-    const lineIndex = Number(target.dataset.line);
-    handleLineSelection(lineIndex);
+
+  if (closeHudAfter) {
+    setHudMenuOpen(false);
   }
 }
 
@@ -1556,37 +1620,56 @@ if (storedSound === "on") {
 applyStaticText();
 setupLobby();
 
-const mobileQuery = window.matchMedia("(max-width: 900px), (max-height: 720px)");
-const updateDeviceClass = () => {
-  const isMobile = mobileQuery.matches;
-  state.isMobile = isMobile;
-  document.body.classList.toggle("mobile", isMobile);
-  if (!state.activeBoard) {
-    state.activeBoard = "PLAYER";
-  }
-  if (!isMobile) {
-    state.activeBoard = "PLAYER";
-  }
-  renderMobileSwitch();
-  elements.app.dataset.activeBoard = state.activeBoard;
-  render();
-};
-updateDeviceClass();
-if (mobileQuery.addEventListener) {
-  mobileQuery.addEventListener("change", updateDeviceClass);
-} else {
-  mobileQuery.addListener(updateDeviceClass);
-}
-
 document.addEventListener("click", handleClick);
+document.addEventListener(
+  "pointerdown",
+  (event) => {
+    const target = event.target instanceof Element ? event.target : null;
+    if (!target) return;
+
+    if (state.hudMenuOpen && !target.closest(".hud-menu")) {
+      setHudMenuOpen(false);
+    }
+
+    if (
+      state.pendingSelection &&
+      state.stage === "PLAY" &&
+      state.currentPlayer === "PLAYER" &&
+      !state.aiThinking &&
+      elements.rulesModal.classList.contains("hidden")
+    ) {
+      const keepSelection =
+        target.closest('[data-action="select-tile"]') ||
+        target.closest('[data-action="choose-line"]') ||
+        target.closest('[data-action="choose-floor"]') ||
+        target.closest('[data-action="switch-board"]') ||
+        target.closest(".hud-menu");
+      if (!keepSelection) {
+        state.pendingSelection = null;
+        render();
+      }
+    }
+  },
+  { capture: true }
+);
 document.addEventListener("change", handleChange);
 elements.rulesModal.addEventListener("click", (event) => {
   if (event.target === elements.rulesModal) {
-    closeRules({ advance: state.stage === "RULES" });
+    closeRules();
   }
 });
 document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape" && !elements.rulesModal.classList.contains("hidden")) {
-    closeRules({ advance: state.stage === "RULES" });
+  if (event.key !== "Escape") return;
+  if (!elements.rulesModal.classList.contains("hidden")) {
+    closeRules();
+    return;
+  }
+  if (state.pendingSelection && state.stage === "PLAY") {
+    state.pendingSelection = null;
+    render();
+    return;
+  }
+  if (state.hudMenuOpen) {
+    setHudMenuOpen(false);
   }
 });
