@@ -11,50 +11,84 @@
 </head>
 <body>
   <noscript>This app requires JavaScript to run.</noscript>
-  <div id="app" class="app">
-    <header class="header">
-      <div>
-        <p class="kicker" id="header-kicker">Azul / Palace of Tiles</p>
-        <h1 class="title" id="header-title">Azul: Elegant AI Duel</h1>
-        <p class="subtitle" id="header-subtitle">Draft tiles, build your wall, and outscore the AI.</p>
-      </div>
-      <div class="header-actions">
-        <button class="btn" type="button" data-action="new-game" id="btn-new-game">New Game</button>
-        <button class="btn ghost" type="button" data-action="open-rules" id="btn-rules">Rules</button>
-        <button class="btn ghost" type="button" data-action="toggle-sound" id="btn-sound">Sound: Off</button>
-        <button class="btn ghost" type="button" data-action="toggle-lang" id="btn-lang">中文</button>
-      </div>
-    </header>
+  <div id="app" class="app" data-screen="intro">
+    <section id="screen-intro" class="screen intro">
+      <div class="intro-card">
+        <p class="intro-kicker" id="intro-kicker">Azul / Palace of Tiles</p>
+        <h1 class="intro-title" id="intro-title">Azul: Elegant AI Duel</h1>
+        <p class="intro-subtitle" id="intro-subtitle">Draft tiles. Build your wall. Outscore the AI.</p>
 
-    <section id="status-bar" class="status-bar"></section>
-    <section id="guide" class="guide"></section>
-    <section id="mobile-switch" class="mobile-switch">
-      <button class="tab" type="button" data-action="switch-board" data-board="PLAYER" id="tab-player">You</button>
-      <button class="tab" type="button" data-action="switch-board" data-board="AI" id="tab-ai">AI</button>
+        <div class="intro-grid" id="intro-rules">
+          <div class="intro-rule">
+            <h3 id="intro-rule-1-title">Draft</h3>
+            <p id="intro-rule-1-body">Take all tiles of one color from a factory or the center.</p>
+          </div>
+          <div class="intro-rule">
+            <h3 id="intro-rule-2-title">Plan</h3>
+            <p id="intro-rule-2-body">Place tiles into one pattern line. Overflows go to the floor (penalty).</p>
+          </div>
+          <div class="intro-rule">
+            <h3 id="intro-rule-3-title">Score</h3>
+            <p id="intro-rule-3-body">When a line completes, move one tile to the wall and score adjacency.</p>
+          </div>
+        </div>
+
+        <div class="intro-actions">
+          <button class="btn" type="button" data-action="go-difficulty" id="btn-continue">Continue</button>
+          <button class="btn ghost" type="button" data-action="toggle-sound" id="btn-sound">Sound: Off</button>
+          <button class="btn ghost" type="button" data-action="toggle-lang" id="btn-lang">中文</button>
+        </div>
+      </div>
     </section>
 
-    <main class="board">
-      <section id="player-area" class="player-area"></section>
-      <section id="ai-area" class="player-area ai"></section>
-    </main>
-
-    <section class="table">
-      <div class="table-header">
-        <h2 id="factories-title">Factories</h2>
-        <p id="factories-subtitle">Pick a tile color from a factory or the center.</p>
+    <section id="screen-difficulty" class="screen difficulty hidden">
+      <div class="difficulty-card-shell">
+        <div class="difficulty-head">
+          <button class="btn ghost" type="button" data-action="go-intro" id="btn-back">Back</button>
+          <div>
+            <h2 class="difficulty-title" id="difficulty-title">Choose AI Difficulty</h2>
+            <p class="difficulty-subtitle" id="difficulty-subtitle">Pick a pace and play style.</p>
+          </div>
+          <div class="difficulty-actions">
+            <button class="btn ghost" type="button" data-action="toggle-sound" id="btn-sound-2">Sound: Off</button>
+            <button class="btn ghost" type="button" data-action="toggle-lang" id="btn-lang-2">中文</button>
+          </div>
+        </div>
+        <div class="difficulty-body" id="difficulty-body"></div>
+        <div class="difficulty-footer">
+          <button class="btn" type="button" data-action="start-game" id="btn-start">Start</button>
+        </div>
       </div>
-      <div id="factories" class="factories"></div>
-      <div id="center" class="center-area"></div>
     </section>
 
-    <section id="controls" class="controls"></section>
-
-    <section class="log">
-      <div class="log-header">
-        <h2 id="log-title">Match Log</h2>
-        <span class="log-hint" id="log-hint">Most recent first</span>
+    <section id="screen-game" class="screen game hidden">
+      <div class="hud">
+        <div class="hud-tabs" id="mobile-switch">
+          <button class="tab" type="button" data-action="switch-board" data-board="PLAYER" id="tab-player">You</button>
+          <button class="tab" type="button" data-action="switch-board" data-board="AI" id="tab-ai">AI</button>
+        </div>
+        <div class="hud-menu" id="hud-menu" data-open="0">
+          <button class="hud-menu-toggle" type="button" data-action="toggle-hud-menu" aria-label="Menu" aria-expanded="false" aria-controls="hud-actions" id="hud-menu-toggle">⋯</button>
+          <div class="hud-actions" id="hud-actions">
+            <button class="hud-btn" type="button" data-action="new-game" id="btn-new-game">New</button>
+            <button class="hud-btn" type="button" data-action="open-rules" id="btn-rules">Rules</button>
+            <button class="hud-btn" type="button" data-action="toggle-sound" id="btn-sound-3">Sound</button>
+            <button class="hud-btn" type="button" data-action="toggle-lang" id="btn-lang-3">Lang</button>
+          </div>
+        </div>
       </div>
-      <div id="log" class="log-body"></div>
+
+      <div class="arena">
+        <div class="pools">
+          <div id="factories" class="factories factories--strip"></div>
+          <div id="center" class="center-area"></div>
+        </div>
+
+        <main class="boards">
+          <section id="player-area" class="player-area"></section>
+          <section id="ai-area" class="player-area ai"></section>
+        </main>
+      </div>
     </section>
   </div>
 
@@ -71,18 +105,6 @@
         <p>Place tiles into a single pattern line. If the line is full, one tile moves to the wall during tiling. Extra tiles overflow to the floor.</p>
         <p>Scoring happens during wall tiling. Adjacent tiles score by line length horizontally and vertically. Floor tiles apply penalties.</p>
         <p>The game ends when any player completes a full row on their wall. Final bonuses apply for rows, columns, and complete colors.</p>
-      </div>
-    </div>
-  </div>
-
-  <div id="difficulty-modal" class="modal hidden" role="dialog" aria-modal="true">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h3 id="difficulty-title">Choose Difficulty</h3>
-      </div>
-      <div class="modal-body" id="difficulty-body"></div>
-      <div class="modal-footer">
-        <button class="btn" type="button" data-action="start-game" id="btn-start">Start</button>
       </div>
     </div>
   </div>
