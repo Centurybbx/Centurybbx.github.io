@@ -22,14 +22,57 @@
    - Handle iframe communication (score, game state)
 */
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function GameEmbed({ gameId, src, title }) {
   const [isLoading, setIsLoading] = useState(true);
+  const iframeRef = useRef(null);
+
+  useEffect(() => {
+    const iframe = iframeRef.current;
+    if (!iframe) return;
+
+    let isUnmounted = false;
+    const markLoaded = () => {
+      if (!isUnmounted) setIsLoading(false);
+    };
+
+    const checkAlreadyLoaded = () => {
+      try {
+        const readyState = iframe.contentDocument?.readyState;
+        if (readyState === 'interactive' || readyState === 'complete') {
+          markLoaded();
+          return true;
+        }
+      } catch {
+        // Cross-origin frame: rely on load event/fallback timer.
+      }
+      return false;
+    };
+
+    iframe.addEventListener('load', markLoaded);
+
+    // If iframe finished loading before hydration, onLoad is missed.
+    checkAlreadyLoaded();
+
+    const fallback = window.setTimeout(() => {
+      if (!checkAlreadyLoaded()) {
+        // Avoid indefinite overlay if load event was missed.
+        markLoaded();
+      }
+    }, 3000);
+
+    return () => {
+      isUnmounted = true;
+      window.clearTimeout(fallback);
+      iframe.removeEventListener('load', markLoaded);
+    };
+  }, [src]);
 
   return (
     <div className="game-embed-container">
       <iframe
+        ref={iframeRef}
         src={src}
         title={title}
         className="game-iframe"
@@ -42,7 +85,7 @@ export default function GameEmbed({ gameId, src, title }) {
           <span>Loading {title}...</span>
         </div>
       )}
-      <style jsx>{`
+      <style>{`
         .game-embed-container {
           position: relative;
           width: 100%;

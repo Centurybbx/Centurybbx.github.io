@@ -42,8 +42,8 @@ export async function getProjects(): Promise<Project[]> {
       longDescription:
         '投资实验室：使用真实市场数据计算资产收益率，支持 TWR (Time-Weighted Return)、定投模拟与历史回测。目前支持 S&P 500、NASDAQ 100、黄金、比特币等资产。',
       tech: ['React', 'TypeScript', 'Vite'],
-      demoUrl: '/games/invest-lab/',
-      isGame: false
+      demoUrl: '/games/invest-lab/index.html',
+      isGame: true
     },
     {
       id: 'azul-mobile',
@@ -52,8 +52,8 @@ export async function getProjects(): Promise<Project[]> {
       longDescription:
         'Azul 花砖物语移动端网页版：响应式设计优化，支持手机浏览器游玩。继承桌面版所有功能，适配小屏幕操作体验。',
       tech: ['React', 'TypeScript', 'Tailwind'],
-      demoUrl: '/games/azul-mobile/',
-      isGame: false
+      demoUrl: '/games/azul-mobile/index.html',
+      isGame: true
     }
   ];
 }
