@@ -44,6 +44,26 @@ export async function getProjects(): Promise<Project[]> {
       tech: ['JavaScript', 'HTML', 'CSS'],
       demoUrl: '/games/azul/index.html',
       isGame: true
+    },
+    {
+      id: 'invest-lab',
+      title: 'Invest Lab',
+      description: 'Investment calculator with real market data for S&P 500, NASDAQ, Bitcoin, Gold and more.',
+      longDescription:
+        '投资实验室：使用真实市场数据计算资产收益率，支持 TWR (Time-Weighted Return)、定投模拟与历史回测。目前支持 S&P 500、NASDAQ 100、黄金、比特币等资产。',
+      tech: ['React', 'TypeScript', 'Vite'],
+      demoUrl: '/games/invest-lab/',
+      isGame: false
+    },
+    {
+      id: 'azul-mobile',
+      title: 'Azul Mobile',
+      description: 'Mobile-first web app version of Azul board game with responsive design.',
+      longDescription:
+        'Azul 花砖物语移动端网页版：响应式设计优化，支持手机浏览器游玩。继承桌面版所有功能，适配小屏幕操作体验。',
+      tech: ['React', 'TypeScript', 'Tailwind'],
+      demoUrl: '/games/azul-mobile/',
+      isGame: false
     }
   ];
 }
