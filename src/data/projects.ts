@@ -36,16 +36,6 @@ export async function getProjects(): Promise<Project[]> {
   // or read from a CMS/API
   return [
     {
-      id: 'azul',
-      title: 'Azul（花砖物语）',
-      description: 'Draft tiles, build your wall, and outscore the AI — playable in your browser.',
-      longDescription:
-        '一个可在 Web 直接游玩的 Azul（花砖物语）对战小游戏：轮流从工坊/中心选择颜色，填充花纹行并在铺墙阶段计分。内置 AI 难度选择、回合日志与中英文切换。',
-      tech: ['JavaScript', 'HTML', 'CSS'],
-      demoUrl: '/games/azul/index.html',
-      isGame: true
-    },
-    {
       id: 'invest-lab',
       title: 'Invest Lab',
       description: 'Investment calculator with real market data for S&P 500, NASDAQ, Bitcoin, Gold and more.',
