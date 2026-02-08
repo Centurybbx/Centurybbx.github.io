@@ -59,7 +59,6 @@ const projects = await getProjects();
         <div class="project-demo">
           {project.isGame ? (
             <GameEmbed
-              client:load
               gameId={project.id}
               src={project.demoUrl}
               title={project.title}
